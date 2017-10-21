@@ -3,9 +3,9 @@ let bodyParser = require('body-parser')
 let request = require('request')
 let app = express()
 
-const FACEBOOK_ACCESS_TOKEN = 'Your_Facebook_Access_Token'
+const FACEBOOK_ACCESS_TOKEN = 'EAAUlOzuCwJEBAMCw4Nhj600tM5T2nnorbG2dRWcjoz7ZAHPx5osps8HmlY7c2bPk5w1BpQT9RjpB9Q5lRa2uYREbkuiUgyiEVz1jsl131jRdWS32m93OvfhFgstqW0kcSSNZCnUAqFoNahxQN44rcbhMbaatfemtfVxOoG4JKDZA2ASCGWzF3FJ7qWyyB8ZD' //置換自己的ＦＢ授權
 const PORT = process.env.PORT || 3000
-const VERIFY_TOKEN = 'Your_Verify_Token'
+const VERIFY_TOKEN = 'chatbot-class-1021' //置換自己的token , 可自定義
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
