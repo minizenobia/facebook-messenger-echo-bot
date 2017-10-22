@@ -14,9 +14,11 @@ app.listen(PORT, function () {
 })
 
 // Facebook Webhook
-app.get('/', function (req, res) {
+app.get('/', function (req, res) {   // facebook 才需要get / 因為授權
     if (req.query['hub.verify_token'] === VERIFY_TOKEN) {
-        res.send(req.query['hub.challenge'])
+        //facebook find "/" and find line 8 verify token > https://fb-chatbotclass.herokuapp.com/?hub.verify_token=chatbot-class-1021
+        res.send(req.query['hub.challenge']) 
+        //https://fb-chatbotclass.herokuapp.com/?hub.verify_token=chatbot-class-1021&hub.challenge=123 如此網頁就會顯示123
     } else {
         res.send('Invalid verify token')
     }
@@ -24,12 +26,12 @@ app.get('/', function (req, res) {
 
 // handler receiving messages
 app.post('/', function (req, res) {
-    let events = req.body.entry[0].messaging
+    let events = req.body.entry[0].messaging // 取得entry 第0項
     for (i = 0; i < events.length; i++) {
         let event = events[i]
-        if (event.message) {
+        if (event.message) { // event 裡有message & texts 回傳
             if (event.message.text) {
-                sendMessage(event.sender.id, { text: event.message.text })
+                sendMessage(event.sender.id, { text: event.message.text }) // 執行send message  sender.id > 寄送人id 此處由ＦＢ取得的編號為亂數非使用者真正id
             }
         }
     }
@@ -39,15 +41,16 @@ app.post('/', function (req, res) {
 // generic function sending messages
 function sendMessage(recipientId, message) {
     let options = {
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: { access_token: FACEBOOK_ACCESS_TOKEN },
+        url: 'https://graph.facebook.com/v2.6/me/messages',  //facebook graph api 回訊息的流程 我方>FB >對方
+        // graph api 內驗證網址取得的資料
+        qs: { access_token: FACEBOOK_ACCESS_TOKEN }, //line 6 token
         method: 'POST',
-        json: {
+        json: { //回傳的訊息
             recipient: { id: recipientId },
             message: message,
         }
     }
-    request(options, function (error, response, body) {
+    request(options, function (error, response, body) {  //此處是使用request 套件
         if (error) {
             console.log('Error sending message: ', error);
         }
